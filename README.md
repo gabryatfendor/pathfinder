@@ -1,0 +1,2 @@
+# pathfinder
+Exploration helper
