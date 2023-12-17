@@ -8,6 +8,4 @@
   * fixme=continue
   * place=locality
   * place=isolated_dwelling
-### Coming up
-* Managing WMS to support more detailed maps
-* Guessing where the fixme=continue could lead listing nearby waypoint
+* Enable WMS layer with local cartography for reference
