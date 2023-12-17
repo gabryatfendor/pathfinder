@@ -3,6 +3,10 @@ h1, h2 {
 	font-family: silkscreen;
 }
 
+#map-options {
+	padding: 1em;
+}
+
 #map {
 	height: 500px;
 }

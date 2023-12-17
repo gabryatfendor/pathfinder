@@ -7,9 +7,18 @@
 		 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      		integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      		crossorigin=""></script>
+		 <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
 		 <title>Pathfinder</title>
 	</head>
 	<body>
+		<header>
+			<h1>Pathfinder</h1>
+			<h2>A fixme:continue friendly map</h2>
+		</header>
+		<div id="map-options">
+			<label>Radius (mt):</label>
+			<input id="map-options-radius" type="text" value="1000" />
+		</div>
 		<div id="map"></div>
 	</body>
 	<script src="js/map.js"></script>

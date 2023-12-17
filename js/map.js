@@ -52,7 +52,7 @@ async function whenPointClicked(e) {
 	var currentCoord = e.sourceTarget.feature.geometry.coordinates;
 	var lon = currentCoord[0];
 	var lat = currentCoord[1];
-	var radius = 1000; //TODO: make this settable by user
+	var radius = document.getElementById('map-options-radius').value;
 
 	var destinations = await getOverpassAround(lat, lon, radius);
 	var geoJson = jsonToGeoJson(destinations);
