@@ -24,6 +24,8 @@ var destinationStyle = {
 };
 
 var basemaps = {
+	None: L.tileLayer(''),
+
 	'CTR Toscana': L.tileLayer.wms('https://www502.regione.toscana.it/ows_ctr/com.rt.wms.RTmap/ows?', {
 		map: 'owsctr',
 		layers: 'rt_ctr.10k',
@@ -41,7 +43,7 @@ var basemaps = {
 };
 
 L.control.layers(basemaps).addTo(map);
-
+basemaps.None.addTo(map);
 var fixmecontinueLayer = new L.Layer();
 var destinationLayer = new L.Layer();
 
