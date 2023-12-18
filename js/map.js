@@ -79,16 +79,53 @@ async function whenPointClicked(e) {
 		}
 	});
 
-	//draw the clicked button in a different color	
-	highlightedFixmecontinue = L.circleMarker(e.latlng, highlightedFixmeContinueStyle).addTo(map);
-	//remove the destination in the same coord
+	//remove the destination in the same coord and style every other dot
 	for (let [key, value] of Object.entries(destinationLayer._layers)) {
 		if (value._latlng.equals(e.latlng)) {
 			delete destinationLayer._layers[key];
+			continue;
+		}
+
+		var tags = value.feature.properties.tags;
+		if (Object.values(tags).includes("peak")) {
+			var name = tags.name;
+			var ele = tags.ele;
+			value.options.fillColor = "#401818";
+			value.setRadius(8);
+			if (name && ele) {
+				if (name.length !== 0 || ele.length !== 0) {
+					value.bindPopup(name + " (" + ele + " mslm)");
+				}
+			}
+		}
+
+		if (Object.values(tags).includes("continue")) {
+			var note = tags.note;
+			value.options.fillColor = "#f54254";
+			value.setRadius(5);
+			if (note) {
+				if (note.length !== 0) {
+					value.bindPopup(note);
+				}
+			}
+		}
+
+		if (Object.values(tags).includes("locality") || Object.values(tags).includes("isolated_dwelling")) {
+			console.log(tags);
+			var name = tags.name;
+			value.options.fillColor = "#e6d627";
+			value.setRadius(8);
+			if (name) {
+				if (name.length !== 0) {
+					value.bindPopup(name);
+				}
+			}
 		}
 	}
 
 	destinationLayer.addTo(map);
+	//draw the clicked button in a different color	
+	highlightedFixmecontinue = L.circleMarker(e.latlng, highlightedFixmeContinueStyle).addTo(map);
 }
 
 function onEachFeature(feature, layer) {
@@ -164,7 +201,7 @@ function jsonToGeoJson(json) {
 				"coordinates": [json.elements[i].lon, json.elements[i].lat]
 			},
 			"properties": {
-				"popupContent": "fixme:continue"
+				"tags": json.elements[i].tags
 			}
 		});
 	}
