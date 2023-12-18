@@ -5,6 +5,7 @@
 * Always show the fixme=continue nodes on the map
 * When clicking on a fixme=continue node list nearby possible destination. At the moment the destination are:
   * natural=peak
+  * natural=saddle
   * fixme=continue
   * place=locality
   * place=isolated_dwelling

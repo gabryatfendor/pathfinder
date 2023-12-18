@@ -16,7 +16,7 @@ var fixmeContinueStyle = {
 
 var highlightedFixmeContinueStyle = {
 	radius: 8,
-	fillColor: "#215229",
+	fillColor: "#42f560",
 	color: "#000000",
 	weight: 1,
 	opacity: 1,
@@ -25,7 +25,7 @@ var highlightedFixmeContinueStyle = {
 
 var destinationStyle = {
 	radius: 6,
-	fillColor: "#42f560",
+	fillColor: "#000000", //if we see a black dot there's something new to style
 	color: "#000000",
 	weight: 1,
 	opacity: 1,
@@ -87,7 +87,7 @@ async function whenPointClicked(e) {
 		}
 
 		var tags = value.feature.properties.tags;
-		if (Object.values(tags).includes("peak")) {
+		if (Object.values(tags).includes("peak") || Object.values(tags).includes("saddle")) {
 			var name = tags.name;
 			var ele = tags.ele;
 			value.options.fillColor = "#401818";
@@ -111,7 +111,6 @@ async function whenPointClicked(e) {
 		}
 
 		if (Object.values(tags).includes("locality") || Object.values(tags).includes("isolated_dwelling")) {
-			console.log(tags);
 			var name = tags.name;
 			value.options.fillColor = "#e6d627";
 			value.setRadius(8);
@@ -156,8 +155,7 @@ async function updatePoints() {
 }
 
 function getOverpassAround(lat, lon, around) {
-	var apiCall = "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%3B%0A%28%0A%20node%5B%22natural%22%3D%22peak%22%5D%28around%3A" + around + "%2C%20" + lat + "%2C" + lon +"%29%3B%0A%20%20node%5B%22place%22~%22locality%7Cisolated_dwelling%22%5D%28around%3A" + around + "%2C%20" + lat + "%2C" + lon + "%29%3B%0A%20%20node%5B%22fixme%22%3D%22continue%22%5D%28around%3A" + around + "%2C%20" + lat + "%2C" + lon + "%29%3B%0A%29%3B%0Aout%20geom%3B";
-
+	var apiCall = "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%3B%0A%28%0A%20node%5B%22natural%22~%22peak%7Csaddle%22%5D%28around%3A" + around + "%2C%20" + lat + "%2C" + lon +"%29%3B%0A%20%20node%5B%22place%22~%22locality%7Cisolated_dwelling%22%5D%28around%3A" + around + "%2C%20" + lat + "%2C" + lon + "%29%3B%0A%20%20node%5B%22fixme%22%3D%22continue%22%5D%28around%3A" + around + "%2C%20" + lat + "%2C" + lon + "%29%3B%0A%29%3B%0Aout%20geom%3B";
 	return fetch(apiCall)
 		.then(response => {
 			if (!response.ok) {
@@ -213,11 +211,4 @@ function jsonToGeoJson(json) {
 updatePoints();
 
 document.getElementById('map-options-reload').addEventListener("click", updatePoints);
-/*map.on('zoomend', function() {
-	updatePoints();
-});
-
-map.on('dragend', function() {
-	updatePoints();
-});*/
 
