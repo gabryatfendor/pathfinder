@@ -14,6 +14,15 @@ var fixmeContinueStyle = {
 	fillOpacity: 0.8
 };
 
+var highlightedFixmeContinueStyle = {
+	radius: 8,
+	fillColor: "#215229",
+	color: "#000000",
+	weight: 1,
+	opacity: 1,
+	fillOpacity: 1
+};
+
 var destinationStyle = {
 	radius: 6,
 	fillColor: "#42f560",
@@ -46,9 +55,16 @@ L.control.layers(basemaps).addTo(map);
 basemaps.None.addTo(map);
 var fixmecontinueLayer = new L.Layer();
 var destinationLayer = new L.Layer();
+var highlightedFixmecontinue = new L.circleMarker();
 
 async function whenPointClicked(e) {
+	//clean up old destination to avoid confusion/overlapping
 	destinationLayer.remove();
+	highlightedFixmecontinue.remove();
+	//clean up all fixme continue for the same reason
+	fixmecontinueLayer.remove();
+	//center position on where i clicked
+	map.panTo(e.latlng);
 	var currentCoord = e.sourceTarget.feature.geometry.coordinates;
 	var lon = currentCoord[0];
 	var lat = currentCoord[1];
@@ -61,7 +77,18 @@ async function whenPointClicked(e) {
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, destinationStyle);
 		}
-	}).addTo(map);
+	});
+
+	//draw the clicked button in a different color	
+	highlightedFixmecontinue = L.circleMarker(e.latlng, highlightedFixmeContinueStyle).addTo(map);
+	//remove the destination in the same coord
+	for (let [key, value] of Object.entries(destinationLayer._layers)) {
+		if (value._latlng.equals(e.latlng)) {
+			delete destinationLayer._layers[key];
+		}
+	}
+
+	destinationLayer.addTo(map);
 }
 
 function onEachFeature(feature, layer) {
@@ -75,6 +102,8 @@ async function updatePoints() {
 		return;
 	}
 	fixmecontinueLayer.remove();
+	destinationLayer.remove();
+	highlightedFixmecontinue.remove();
 	var NE = map.getBounds()._northEast;
 	var SW = map.getBounds()._southWest;
 	
@@ -146,11 +175,12 @@ function jsonToGeoJson(json) {
 //first map update
 updatePoints();
 
-map.on('zoomend', function() {
+document.getElementById('map-options-reload').addEventListener("click", updatePoints);
+/*map.on('zoomend', function() {
 	updatePoints();
 });
 
 map.on('dragend', function() {
 	updatePoints();
-});
+});*/
 
