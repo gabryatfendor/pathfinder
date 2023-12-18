@@ -207,6 +207,8 @@ function jsonToGeoJson(json) {
 	return geojson;
 }
 
+map.addControl(new L.Control.Fullscreen());
+map.addControl(new L.Control.geocoder());
 //first map update
 updatePoints();
 
