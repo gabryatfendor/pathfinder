@@ -48,6 +48,21 @@ var basemaps = {
 		format: 'image/png',
 		transparent: true,
 		version: '1.3.0'
+	}),
+
+	'Ortophoto Toscana': L.tileLayer.wms('https://www502.regione.toscana.it/ows_ofc/com.rt.wms.RTmap/wms?', {
+		map: 'owsofc_rt',
+		layers: 'rt_ofc.5k21.32bit',
+		format: 'image/png',
+		transparent: true,
+		version: '1.3.0'
+	}),
+
+	'Ortophoto Emilia-Romagna': L.tileLayer.wms('https://servizigis.regione.emilia-romagna.it/wms/agea2020_rgb?', {
+		layers: 'Agea2020_RGB',
+		format: 'image/png',
+		transparent: 'true',
+		version: '1.3.0'
 	})
 };
 
