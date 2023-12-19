@@ -106,6 +106,7 @@ async function whenPointClicked(e) {
 			if (note) {
 				if (note.length !== 0) {
 					value.bindPopup(note);
+					value.options.fillColor = "#e28743";
 				}
 			}
 		}
@@ -125,6 +126,10 @@ async function whenPointClicked(e) {
 	destinationLayer.addTo(map);
 	//draw the clicked button in a different color	
 	highlightedFixmecontinue = L.circleMarker(e.latlng, highlightedFixmeContinueStyle).addTo(map);
+	if (e.sourceTarget.feature.properties.tags.note) {
+		highlightedFixmecontinue.bindPopup(e.sourceTarget.feature.properties.tags.note);
+		highlightedFixmecontinue.togglePopup();
+	}
 }
 
 function onEachFeature(feature, layer) {
@@ -151,7 +156,16 @@ async function updatePoints() {
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, fixmeContinueStyle);
 		}
-	}).addTo(map);
+	});
+
+	//change color of fixme=continue with possible destination
+	for (let [key, value] of Object.entries(fixmecontinueLayer._layers)) {
+		var tags = value.feature.properties.tags;
+		if (tags.note) {
+			value.options.fillColor = "#e28743";
+		}
+	}
+	fixmecontinueLayer.addTo(map);
 }
 
 function getOverpassAround(lat, lon, around) {
